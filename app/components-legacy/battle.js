@@ -3,53 +3,42 @@ import {FaUserFriends, FaFighterJet, FaTrophy} from "react-icons/fa"
 import PlayerInput from "./playerInput";
 import {Instructions} from "./instructions";
 import {Provider as ThemeProvider, Consumer as ThemeConsumer} from "../context/theme";
+import ThemeContext from './../context/theme';
 
-export default class Battle extends React.Component{
+export default function Battle() {
 
-    state = {
-        theme : 'light',
-        toggle : () => this.setState( ({theme}) => ({
-            theme : theme === 'light' ? 'dark' : 'light'
-        }))
-    }
+    const {theme, toggleTheme} = React.useContext(ThemeContext);
 
-    render() {
-        return (
-            <ThemeProvider value={this.state}>
-                <React.Fragment>
-                    <ThemeConsumer>
-                        { (data) =>  <div className={data.theme}>
-                            <h1>Instructions</h1>
-                            <button onClick={data.toggle}>Toggle mode!</button>
-                            <Logos_EN/>
-                            <div className='battle-container'>
-                                <Instructions/>
+    return (
+        <React.Fragment>
+            <div className={theme}>
+                <h1>Instructions</h1>
+                <button onClick={toggleTheme}>Toggle mode!</button>
+                <Logos_EN/>
+                <div className='battle-container'>
+                    <Instructions/>
 
-                            </div>
-                        </div>}
-                    </ThemeConsumer>
+                </div>
+            </div>
+        </React.Fragment>
 
+    )
 
-                </React.Fragment>
-            </ThemeProvider>
-
-        )
-    }
-
-    changeLang(data, lang) {
+    changeLang(data, lang)
+    {
         data.toggle(lang)
     }
 }
 
 function Logos_IT() {
-    return  <div className='battle-grid'>
+    return <div className='battle-grid'>
         <div>
             <h3>la italia Gitub Users</h3>
             <FaUserFriends size={140}/>
         </div>
 
         <div>
-            <h3>la italia  Battle</h3>
+            <h3>la italia Battle</h3>
             <FaFighterJet size={140}/>
         </div>
 
@@ -60,11 +49,11 @@ function Logos_IT() {
     </div>
 }
 
-function Logos({locale}){
+function Logos({locale}) {
 
-    if (locale.locale === 'es'){
-      return <Logos_ES/>
-    }else if (locale.locale == 'it'){
+    if (locale.locale === 'es') {
+        return <Logos_ES/>
+    } else if (locale.locale == 'it') {
         return <Logos_IT/>
     } else {
         return <Logos_EN/>
@@ -72,8 +61,8 @@ function Logos({locale}){
 
 }
 
-function Logos_EN(){
-    return  <div className='battle-grid'>
+function Logos_EN() {
+    return <div className='battle-grid'>
         <div>
             <h3>Enter Two Github Users</h3>
             <FaUserFriends size={140}/>
@@ -91,8 +80,8 @@ function Logos_EN(){
     </div>
 }
 
-function Logos_ES(){
-    return  <div className='battle-grid'>
+function Logos_ES() {
+    return <div className='battle-grid'>
         <div>
             <h3>espaniol name</h3>
             <FaUserFriends size={140}/>

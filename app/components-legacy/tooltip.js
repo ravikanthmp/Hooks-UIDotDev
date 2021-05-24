@@ -1,9 +1,12 @@
 import React from "react";
 import ReactTooltip from "react-tooltip";
+import useHover from "../hooks/useHover";
 
-function Tooltip({text, id, children, hovering}) {
+function Tooltip({text, id, children}) {
 
-    if (hovering) { return (<div>
+    const {hovering, attr} = useHover('false')
+
+    if (hovering) { return (<div {...attr}>
             <div id={id} place="top-right" effect="solid">
                 {text}
             </div>
@@ -11,7 +14,7 @@ function Tooltip({text, id, children, hovering}) {
                 {children}
             </ReactTooltip>
         </div>)
-    } else { return (<div>
+    } else { return (<div {...attr}>
             {children}
         </div>)
     }

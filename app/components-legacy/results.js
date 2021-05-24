@@ -3,7 +3,7 @@ import {fetchReposForUser, fetchUser} from './../utils/util'
 import Loading from "./loading";
 import {ProfileItems} from "./profileItems";
 import {parse} from 'query-string'
-
+import {Player} from "./player";
 export default class Results extends React.Component{
 
     constructor(props, context) {
@@ -102,18 +102,5 @@ export default class Results extends React.Component{
        return  data.reduce( (count, repo) => count + 5*repo['stargazers_count'] + 3*repo['forks'] - 2*repo['open_issues'], 0)
     }
 
-}
-
-function Player({playerProfile, winnerLoser, score, children}) {
-    const {name, avatar_url, login, html_url} = playerProfile;
-    return (<li className={'grid-cell'} key={name}>
-        <h1 className='center-text'>{winnerLoser}</h1>
-        <img src={avatar_url} className='avatar'/>
-        <h3 className={'center-text'}>Score {score}</h3>
-        <a href={html_url}>
-            <h2 className={'center-text'}>{login}</h2>
-        </a>
-        {children}
-    </li>)
 }
 

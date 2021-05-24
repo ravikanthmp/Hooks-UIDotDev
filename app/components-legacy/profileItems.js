@@ -3,7 +3,6 @@ import React from "react";
 import * as PropTypes from "prop-types";
 import Tooltip from "./tooltip";
 import {IoLogoYoutube} from "react-icons/all";
-import Hover from "./hover";
 
 export class ProfileItems extends React.Component {
 
@@ -32,11 +31,11 @@ export class ProfileItems extends React.Component {
 
             {{company} && (<li> {company}</li>)}
 
-            {{company} && (<li><Hover renderProps ={(hovering) => <Tooltip  id="company" text="Hi there!" hovering={hovering}>
+            {{company} && (<li><Tooltip  id="company" text="Hi there!">
                 <FaCodeBranch size={22}/>
                 {company}
             </Tooltip>}>
-            </Hover></li>)}
+            </li>)}
 
             {{followers} && (<li>
                 <FaExclamationTriangle size={22}/>
