@@ -1,5 +1,4 @@
-import React from "react";
-import {useState} from "react/cjs/react.production.min";
+import React, {useState} from "react";
 
 export default function useHover(){
 

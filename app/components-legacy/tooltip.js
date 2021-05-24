@@ -6,7 +6,6 @@ function Tooltip({text, id, children}) {
 
     const {hovering, attr} = useHover('false')
 
-    console.log({hovering, attr})
     if (hovering) { return (<div {...attr}>
             <div id={id} place="top-right" effect="solid">
                 {text}
