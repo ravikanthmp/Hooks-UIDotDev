@@ -1,38 +1,31 @@
-import React from "react";
-import ReactDOM from 'react-dom';
+import React, {useState} from "react";
 import LangAsButton from "./langButton";
 import fetchFromGithub from "./../utils/util"
-import fetchRepos from "./../utils/util";
-import PropTypes from 'prop-types'
-import {FaCodeBranch, FaExclamationTriangle, FaGrinBeamSweat, FaStar, FaUser} from 'react-icons/fa'
+import {ReposGrid} from "./reposGrid";
 
-export default class Popular extends React.Component{
+const init = {
+    selectedLanguage : 'Java',
+    repos : {},
+    error : null,
+};
 
-    constructor(props, context) {
-        super(props, context);
+export function Popular2(){
 
-        this.state = {
-            selectedLanguage : 'All',
-            repos : {},
-            error : null,
-        }
+    const [state, setState] = useState(init);
 
-        this.updateLanguage = this.updateLanguage.bind(this)
-        this.isLoading = this.isLoading.bind(this)
-    }
+    let updateLanguage = (lang) => {
 
-    updateLanguage(lang){
-        this.setState({
+        setState({
             selectedLanguage : lang,
-            error : null
-        })
-
-        const savedRepos = this.state.repos[lang];
+            error : null,
+            repos : {},
+        });
+        console.log(`update language called`)
+        const savedRepos = state.repos[lang];
         if (!savedRepos){
-            console.log(`fetching from github. current state is ` + JSON.stringify(this.state, null,  2))
-            this.fetchRepos(lang)
+            fetchRepos(lang)
                 .then(data => {
-                        this.setState( ({repos}) => {
+                        setState( ({repos}) => {
                             repos[lang] = data;
                             return {
                                 selectedLanguage : lang,
@@ -57,7 +50,7 @@ export default class Popular extends React.Component{
         }
     }
 
-    fetchRepos(lang){
+    let fetchRepos = (lang) => {
         return fetchFromGithub(lang)
             .then(data => data.json())
             .then(data => {
@@ -69,28 +62,17 @@ export default class Popular extends React.Component{
             })
     }
 
-    isLoading(){
-        let {repos, selectedLanguage, error} = this.state
-        return !repos[selectedLanguage] && !error
+    let isLoading = () => {
+        console.log({state})
+        return !state.repos || !state.repos[state.selectedLanguage] && !state.error
     }
 
-    componentDidMount() {
-        console.log(`component did mount!`)
-        this.updateLanguage(this.state.selectedLanguage)
-    }
+    return (<React.Fragment>
+        <PopularUI languages={['Java', 'C', 'All']} updateLanguage={updateLanguage} selectedLanguage={state.selectedLanguage} isLoading={isLoading}/>
 
-    render() {
-
-        const {repos, selectedLanguage, error} = this.state
-        console.log(JSON.stringify(this.state, null, 2))
-        return (<React.Fragment>
-                <PopularUI languages={['Java', 'C', 'All']} updateLanguage={this.updateLanguage} selectedLanguage={selectedLanguage} isLoading={this.isLoading}/>
-
-                {this.isLoading() && <p>Loading!</p>}
-                <ReposGrid repos={repos[selectedLanguage]}/>
-            </React.Fragment>)
-
-    }
+        {isLoading() && <p>Loading!</p>}
+        <ReposGrid repos={state.repos[state.selectedLanguage]}/>
+    </React.Fragment>)
 }
 
 function PopularUI({languages, updateLanguage, selectedLanguage, isLoading}) {
@@ -110,59 +92,4 @@ function PopularUI({languages, updateLanguage, selectedLanguage, isLoading}) {
             </ul>
         </React.Fragment>
     )
-}
-
-Popular.propTypes = {
-    languages : PropTypes.arrayOf(PropTypes.string).isRequired
-}
-
-
-function ReposGrid({repos}){
-    if (!repos){
-        return null;
-    }
-    return (
-        <ul className={'grid-container space-around'}>
-            {repos.map((repo, index) => {
-
-                const {id, name, owner, html_url, open_issues_count, stargazers_count, forks} = repo;
-                const {avatar_url, login} = owner;
-                return (<li className={'grid-cell'} key={id}>
-                    <h1 className='center-text'>{index}</h1>
-                    <img src={avatar_url} className='avatar'/>
-                    <a href={html_url}>
-                        <h2 className={'center-text'}>{login}</h2>
-                    </a>
-                    <ul>
-                        <li>
-                            <FaUser size={22} />
-                            {name}
-                        </li>
-
-                        <li>
-                            <FaStar size={22} />
-                            {stargazers_count}
-                        </li>
-
-                        <li>
-                            <FaCodeBranch size={22} />
-                            {forks}
-                        </li>
-
-                        <li>
-                            <FaExclamationTriangle size={22} />
-                            {open_issues_count}
-                        </li>
-
-                    </ul>
-                </li>
-                )
-            })}
-        </ul>
-
-    )
-}
-
-ReposGrid.propTypes = {
-    repos : PropTypes.arrayOf(PropTypes.object).isRequired
 }

@@ -5,7 +5,7 @@ import Battle from "./components-legacy/battle";
 import CoinMarket from "./components-legacy/coinMarket";
 import Myform from "./components-legacy/myform";
 import PlayerInput from "./components-legacy/playerInput";
-import Popular from "./components-legacy/popular";
+import {Popular2}  from "./components-legacy/popular";
 import {LocaleContext} from "./components-legacy/localeContext";
 import {BrowserRouter as Router, Link, Route, NavLink, Switch, Redirect} from "react-router-dom";
 import Results from "./components-legacy/results";
@@ -42,7 +42,7 @@ class Hello extends React.Component {
                                         <NavLink
                                             activeStyle={this.activeStyle}
                                             exact
-                                            to="/">Popular</NavLink>
+                                            to="/refactoredPopular">Popular2</NavLink>
                                     </li>
                                     <li>
                                         <NavLink
@@ -52,7 +52,7 @@ class Hello extends React.Component {
                                 </ul>
                             </div>
                             <Switch>
-                                <Route exact path="/" component={Popular}/>
+                                <Route exact path="/refactoredPopular" component={Popular2}/>
                                 <Route path="/battle" component={Battle}/>
                                 <Route path='/results' component={Results}/>
                                 <Route component={() => (<h3>Not Found bruh!</h3>)}/>
