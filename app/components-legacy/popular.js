@@ -15,14 +15,18 @@ export function Popular2(){
 
     let updateLanguage = (lang) => {
 
-        setState({
-            selectedLanguage : lang,
-            error : null,
-            repos : {},
+        setState((prev) => {
+            return {
+                ...prev,
+                selectedLanguage : lang,
+                error : null,
+            }
         });
-        console.log(`update language called`)
+
         const savedRepos = state.repos[lang];
+        console.log({state})
         if (!savedRepos){
+            console.log(`update language called..fetching from net`)
             fetchRepos(lang)
                 .then(data => {
                         setState( ({repos}) => {
@@ -45,7 +49,7 @@ export function Popular2(){
                     })
                 })
         }else {
-            console.log(`fetching from cache. current state is ` + JSON.stringify(this.state, null, 2))
+            console.log(`fetching from cache. current state is ` + JSON.stringify(state, null, 2))
             return savedRepos;
         }
     }
